@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useRevalidator } from "react-router";
+import { Form, useRevalidator } from "react-router";
 import { Input } from "~/components/input";
 import { getPublic } from "~/utils/.client/public";
 import { getCommon } from "~/utils/.common/common";
 import { getSecret } from "~/utils/.server/secret";
 import { getEnv } from "~/utils/env.server";
-import dbLogo from "/images/database.svg";
 import type { Route } from "./+types/_index";
+import dbLogo from "/images/database.svg";
 
 export function loader() {
   console.log(getSecret(), getCommon());
@@ -24,6 +24,18 @@ export async function clientLoader({ serverLoader }: Route.ClientLoaderArgs) {
 
 clientLoader.hydrate = true;
 
+async function doSomethingThatTakesALongTime() {
+  return new Promise((resolve) =>
+    setTimeout(() => resolve("result"), 20000)
+  ) as Promise<string>;
+}
+
+export async function action() {
+  return {
+    result: await doSomethingThatTakesALongTime(),
+  };
+}
+
 export default function Index({ loaderData: data }: Route.ComponentProps) {
   const [value, setValue] = useState("");
   console.log("dbLogo", dbLogo);
@@ -31,6 +43,16 @@ export default function Index({ loaderData: data }: Route.ComponentProps) {
   const { revalidate } = useRevalidator();
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
+      <Form method="POST">
+        <button
+          type="submit"
+          formMethod="POST"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Execute action
+        </button>
+      </Form>
+
       <button
         type="button"
         onClick={revalidate}

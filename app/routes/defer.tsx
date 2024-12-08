@@ -4,7 +4,7 @@ import type { Route } from "./+types/defer";
 
 async function getProjectLocation() {
   return new Promise((resolve) =>
-    setTimeout(() => resolve("user/project"), 5000)
+    setTimeout(() => resolve("user/project"), 2000)
   ) as Promise<string>;
 }
 
