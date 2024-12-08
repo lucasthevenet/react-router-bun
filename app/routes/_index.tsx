@@ -26,7 +26,7 @@ clientLoader.hydrate = true;
 
 async function doSomethingThatTakesALongTime() {
   return new Promise((resolve) =>
-    setTimeout(() => resolve("result"), 20000)
+    setTimeout(() => resolve("result"), 12000)
   ) as Promise<string>;
 }
 
